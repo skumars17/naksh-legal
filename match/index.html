@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Naksh — See Your Shared Rhythm</title>
+  <meta name="description" content="Someone shared their rhythm dimensions with you on Naksh. Open the app to see how your patterns interact.">
+  <meta property="og:title" content="See how our rhythms interact">
+  <meta property="og:description" content="Open in Naksh to discover your shared dimensions.">
+  <meta property="og:type" content="website">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #080B16;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      max-width: 380px;
+      width: 100%;
+      text-align: center;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      padding: 40px 28px;
+    }
+    .star { font-size: 48px; margin-bottom: 20px; opacity: 0.7; }
+    h1 {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #f1f5f9;
+    }
+    .subtitle {
+      font-size: 14px;
+      color: #94a3b8;
+      line-height: 1.5;
+      margin-bottom: 32px;
+    }
+    .open-btn {
+      display: inline-block;
+      width: 100%;
+      padding: 16px 24px;
+      background: linear-gradient(135deg, #6366f1, #8b5cf6);
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      margin-bottom: 12px;
+      transition: opacity 0.2s;
+    }
+    .open-btn:hover { opacity: 0.9; }
+    .store-btn {
+      display: inline-block;
+      width: 100%;
+      padding: 14px 24px;
+      background: transparent;
+      color: #8b5cf6;
+      font-size: 14px;
+      font-weight: 500;
+      border: 1px solid rgba(139,92,246,0.3);
+      border-radius: 14px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s;
+    }
+    .store-btn:hover { opacity: 0.8; }
+    .privacy {
+      margin-top: 24px;
+      font-size: 11px;
+      color: #64748b;
+      line-height: 1.5;
+    }
+    .code-display {
+      font-family: 'SF Mono', 'Menlo', monospace;
+      font-size: 20px;
+      letter-spacing: 4px;
+      color: #8b5cf6;
+      background: rgba(139,92,246,0.1);
+      padding: 10px 20px;
+      border-radius: 10px;
+      display: inline-block;
+      margin-bottom: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="star">&#10022;</div>
+    <h1>See your shared rhythm</h1>
+    <p class="subtitle">Someone shared their dimensions with you on Naksh. Open the app to discover how your patterns interact.</p>
+
+    <div id="code-box" class="code-display" style="display:none;"></div>
+
+    <a id="open-link" class="open-btn" href="#">Open in Naksh</a>
+    <a class="store-btn" href="https://apps.apple.com/app/id6760689958">Get Naksh on the App Store</a>
+
+    <p class="privacy">Your birth data stays private.<br>Only encoded patterns are shared — no personal information.</p>
+  </div>
+
+  <script>
+    // Extract the share code from the URL
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+    const cpv = params.get('cpv');
+
+    if (code) {
+      // Show the code visually
+      const codeBox = document.getElementById('code-box');
+      codeBox.textContent = code;
+      codeBox.style.display = 'inline-block';
+
+      // Build the deep link — try custom scheme first, fall back to universal link
+      const deepLink = 'naksh://stars/match?code=' + encodeURIComponent(code);
+      const webFallback = window.location.href;
+
+      document.getElementById('open-link').href = deepLink;
+    } else if (cpv) {
+      // Legacy direct CPV link
+      const deepLink = 'naksh://stars/match?cpv=' + encodeURIComponent(cpv);
+      document.getElementById('open-link').href = deepLink;
+    }
+
+    // Auto-attempt to open the app after a short delay
+    if (code || cpv) {
+      setTimeout(function() {
+        const link = document.getElementById('open-link').href;
+        if (link && link !== '#') {
+          window.location.href = link;
+        }
+      }, 800);
+    }
+  </script>
+</body>
+</html>
